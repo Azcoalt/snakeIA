@@ -1,0 +1,22 @@
+## AGENTE HUMANO
+persepcion: a traves de fuerza human
+
+## AGENTE ROBOTICO
+persepcion: atraves de los censores
+
+## AGENTE DE SOFTWARE
+Persepcion: fuentes de datos(teclado, archivos, camara)
+
+## En Python 
+1. Aima
+2. simple IA
+
+# AGENTE RACIONAL
+* Es aquel que hace lo correcto, es decir, aquello que le permite optener unbuen desempeño
+* La medicion de pequeño varia entre los agentes
+* Racionalidad != omnisiencia
+* No existe la omnisiencia
+
+# AGENTE RACIONAL IDEAL
+
+

@@ -5,7 +5,7 @@ import random
 # Configuración del juego
 GAME_WIDTH = 500
 GAME_HEIGHT = 500
-SPEED = 80
+SPEED = 70
 SPACE_SIZE = 20
 BODY_PARTS = 3
 SNAKE_COLOR = "#0000FF"
@@ -57,10 +57,14 @@ class Obstacle:
         canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=OBSTACLE_COLOR, tag="obstacle")
 
 # Función que maneja el próximo turno del juego
-def next_turn(snake, food):
+# Función que maneja el próximo turno del juego
+def next_turn():
+    global snake, food, score
+
+    # Obtiene las coordenadas de la cabeza de la serpiente
     x, y = snake.coordinates[0]
 
-    # Mueve la serpiente en la dirección actual
+    # Calcula las nuevas coordenadas de la cabeza de la serpiente según la dirección
     if direction == "up":
         y -= SPACE_SIZE
     elif direction == "down":
@@ -78,25 +82,24 @@ def next_turn(snake, food):
     snake.squares.insert(0, square)
 
     # Verifica si la serpiente alcanza la comida
-    if x == food.coordinates[0] and y == food.coordinates[1]:
-        global score
+    if (x, y) == tuple(food.coordinates):
         score += 1
         label.config(text="Score: {}".format(score))
         canvas.delete("food")
         food = Food()  # Crea nueva comida
-
     else:
         # Elimina la última parte de la serpiente
         del snake.coordinates[-1]
         canvas.delete(snake.squares[-1])
         del snake.squares[-1]
 
-    # Verifica si hay colisiones con los obstáculos
-    if check_collisions(snake):
+    # Verifica si hay colisiones con los obstáculos o los bordes del área de juego
+    if check_collisions():
         game_over()
     else:
         # Programa el próximo turno
-        window.after(SPEED, next_turn, snake, food)
+        window.after(SPEED, next_turn)
+
 
 # Función para cambiar la dirección de la serpiente
 def change_direction(new_direction):
@@ -112,7 +115,7 @@ def change_direction(new_direction):
         direction = new_direction
 
 # Función para verificar colisiones
-def check_collisions(snake):
+def check_collisions():
     x, y = snake.coordinates[0]
 
     # Verifica si la serpiente choca con los bordes del área de juego
@@ -130,15 +133,15 @@ def exit():
 
 # Función para reiniciar el juego
 def restart():
-    global score, direction, button, button2
+    global score, direction, snake, food, button, button2
     score = 0
     direction = 'down'
     label.config(text="Score: {}".format(score))
     canvas.delete("all")
     snake = Snake()
     food = Food()
-    create_obstacles()  # Crea nuevos obstáculos
-    next_turn(snake, food)
+    create_obstacles()  # Crear obstáculos
+    next_turn()  # Comenzar el juego
     button.destroy()
     button2.destroy()
 
@@ -157,6 +160,7 @@ def game_over():
     button2.pack()
     button2.place(x=200, y=450)
 
+# Función para crear obstáculos
 def create_obstacles():
     global obstacles
     obstacles = []
@@ -172,7 +176,7 @@ window.readprofile(False, False)
 
 #INICIALIZACION DEL PUNTAJE DEL JUEGO 
 score = 0
-direction = 'dow'
+direction = 'down'
 
 #ETIQUETA PARA MOSTRAR EL PUNTAJE
 label = Label(window,text="Score{} ".format(score),font=('consolas',40))
@@ -210,7 +214,9 @@ food = Food()
 create_obstacles()  # Crear obstáculos
 
 #COMENZAR EL JUEGO
-next_turn(snake, food)
+next_turn()
 
 #INICIALIZA EL BUCLE DE LA VENTANA 
 window.mainloop()
+
+

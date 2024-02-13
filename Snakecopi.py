@@ -214,3 +214,4 @@ next_turn(snake, food)
 
 #INICIALIZA EL BUCLE DE LA VENTANA 
 window.mainloop()
+
